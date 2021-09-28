@@ -7,8 +7,9 @@
 export const pick = (obj, ...fields) => {
   let resObj = {};
 
-  for (let i = 0; i < [...fields].length; i++) {
-    resObj[[...fields][i]] = '';
+  // первоначальный вариант
+  /*for (let i = 0; i < [...fields].length; i++) {
+    resObj[fields[i]] = '';
   }
 
   for (const [key, value] of Object.entries(obj)) {
@@ -21,7 +22,14 @@ export const pick = (obj, ...fields) => {
     if (resObj[key] === '') {
       delete resObj[key];
     }
-  }
+  }*/
+
+  // исправленный вариант
+  Object.entries(obj).forEach(([key, value]) => {
+    if (fields.indexOf(key) !== -1) {
+      resObj[key] = value;
+    }
+  });
 
   return resObj;
 };
