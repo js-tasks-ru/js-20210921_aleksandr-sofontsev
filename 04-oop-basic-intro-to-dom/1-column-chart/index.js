@@ -56,7 +56,6 @@ export default class ColumnChart {
 
     //провальная попытка сделать компонент только инструментами js, избегая голый html
     /*const gl = document.createElement('div');
-
     const columnChart = document.createElement('div');
     columnChart.className = 'column-chart';
     gl.append(columnChart);
