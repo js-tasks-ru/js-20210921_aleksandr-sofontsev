@@ -29,7 +29,7 @@ export default class ColumnChart {
 
   getTemplate () {
     return `
-        <div class class="column-chart" style="--chart-height: ${this.chartHeight}">
+        <div class="column-chart" style="--chart-height: ${this.chartHeight}">
             <div class="column-chart__title">
                 Total ${this.label}
                 <a href="/${this.link}" class="column-chart__link">View all</a>
@@ -40,17 +40,15 @@ export default class ColumnChart {
                     ${this.getColumns(this.data)}
                 </div>
             </div>
-        </div>>
+        </div>
     `;
   }
 
   render () {
-    const element = document.createElement('div'); // (*)
+    const element = document.createElement('div');
     element.innerHTML = this.getTemplate();
     this.element = element.firstElementChild;
 
-    // NOTE: в этой строке мы избавляемся от обертки-пустышки в виде `div`
-    // который мы создали на строке (*)
     if (this.data.length === 0) {
       this.element.classList.add('column-chart_loading');
     }
@@ -58,10 +56,6 @@ export default class ColumnChart {
 
   update (data) {
     this.data = data;
-  }
-
-  initEventListeners () {
-    // NOTE: в данном методе добавляем обработчики событий, если они есть
   }
 
   remove () {
