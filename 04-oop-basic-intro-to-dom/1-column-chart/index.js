@@ -1,41 +1,30 @@
 export default class ColumnChart {
-  data = [];
-  label = '';
-  value = 0;
-  link = '';
-  formatHeading = data => data;
-  chartHeight = 0;
 
-  constructor(obj) {
+  constructor({
+    data = [],
+    label = '',
+    link = '',
+    value = 0,
+    formatHeading = data => data,
+  } = {}) {
+    this.data = data;
+    this.label = label;
+    this.link = link;
+    this.value = formatHeading(value);
     this.chartHeight = 50;
-    if (typeof obj !== 'undefined') {
-      Object.entries(obj).forEach(([key, value]) => {
-        if (key === 'data') {this.data = value;}
-        if (key === 'label') {this.label = value;}
-        if (key === 'value') {this.value = value;}
-        if (key === 'link') {this.link = value;}
-        if (key === 'formatHeading') {this.formatHeading = value;}
-        if (key === 'chartHeight') {this.chartHeight = 50;}
-      });
-    }
 
     this.render();
   }
 
-  getColumns () {
-    let resData = '';
+  getColumns (data) {
+    const maxValue = Math.max(...data);
+    const scale = this.chartHeight / maxValue;
 
-    if (this.data.length === 0) {
-      return;
-    }
+    return data.map(item => {
+      const percent = (item / maxValue * 100).toFixed(0);
 
-    for (let val of this.data) {
-      let rate = Math.round((val / Math.max(...this.data)) * 100);
-      let size = Math.floor(val * (50 / Math.max(...this.data)));
-      resData = resData.concat(`<div style="--value: ${size}" data-tooltip="${rate}%"></div>`);
-    }
-
-    return resData;
+      return `<div style="--value: ${Math.floor(item * scale)}" data-tooltip="${percent}%"></div>`;
+    }).join('');
   }
 
   getTemplate () {
@@ -46,30 +35,17 @@ export default class ColumnChart {
                 <a href="/${this.link}" class="column-chart__link">View all</a>
             </div>
             <div class="column-chart__container">
-                <div data-element="header" class="column-chart__header">${this.formatHeading(this.value)}</div>
+                <div data-element="header" class="column-chart__header">${this.value}</div>
                 <div data-element="body" class="column-chart__chart">
-                    ${this.getColumns()}
+                    ${this.getColumns(this.data)}
                 </div>
             </div>
         </div>>
     `;
-
-    //провальная попытка сделать компонент только инструментами js, избегая голый html
-    /*const gl = document.createElement('div');
-    const columnChart = document.createElement('div');
-    columnChart.className = 'column-chart';
-    gl.append(columnChart);
-
-    const columnChartTitle = document.createElement('div');
-    columnChartTitle.className = `column-chart__${this.label}`;
-    columnChartTitle.innerHTML = `${this.label}`;
-    columnChart.append(columnChartTitle);
-    return `here-${columnChart}`;*/
   }
 
   render () {
     const element = document.createElement('div'); // (*)
-    //this.element = this.getTemplate(); //получил, к сожалению, [object HTMLDivElement]
     element.innerHTML = this.getTemplate();
     this.element = element.firstElementChild;
 
@@ -84,9 +60,9 @@ export default class ColumnChart {
     this.data = data;
   }
 
-  //initEventListeners () {
-  // NOTE: в данном методе добавляем обработчики событий, если они есть
-  //}
+  initEventListeners () {
+    // NOTE: в данном методе добавляем обработчики событий, если они есть
+  }
 
   remove () {
     this.element.remove();
