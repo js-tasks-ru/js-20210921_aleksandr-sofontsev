@@ -1,6 +1,6 @@
 export default class NotificationMessage {
 
-  static singleton = {};
+  static prevObj = {};
 
   constructor(mess, {
     duration = 0,
@@ -34,12 +34,12 @@ export default class NotificationMessage {
   }
 
   show(elem = document.body) {
-    if (Object.keys(NotificationMessage.singleton).length) {
-      NotificationMessage.singleton.destroy();
+    if (Object.keys(NotificationMessage.prevObj).length) {
+      NotificationMessage.prevObj.destroy();
     }
 
     elem.append(this.element);
-    NotificationMessage.singleton = this;
+    NotificationMessage.prevObj = this;
     setTimeout(() => {this.destroy();}, this.duration);
   }
 

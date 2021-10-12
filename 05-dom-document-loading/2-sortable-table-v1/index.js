@@ -1,6 +1,5 @@
 export default class SortableTable {
 
-  //constructor(headerConfig = [], data = []) {
   constructor(headerConfig = [], {data = []} = {}) {
     this.headerConfig = headerConfig;
     this.data = data;
@@ -50,8 +49,11 @@ export default class SortableTable {
   }
 
   getColVal(item) {
-    return this.headerConfig.map(hItem => hItem.template ? hItem.template(item[hItem.id]) : `<div class="sortable-table__cell">${item[hItem.id]}</div>`)
-      .join('');
+    return this.headerConfig.map(hItem => {
+      return hItem.template
+        ? hItem.template(item[hItem.id])
+        : `<div class="sortable-table__cell">${item[hItem.id]}</div>`;
+    }).join('');
   }
 
   render() {
@@ -64,24 +66,20 @@ export default class SortableTable {
 
   sort (fieldValue, orderValue) {
     const ord = {"asc": 1, "desc": -1};
+    const sortColumn = this.headerConfig.find(elem => elem.id === fieldValue);
 
-    const SortColumn = this.headerConfig.find(function (elem) {
-      if (elem.id === fieldValue) {
-        return true;
-      }
-    });
-
-    if (SortColumn.sortable) {
+    if (sortColumn.sortable) {
       this.data.sort((a, b) => {
-        if (SortColumn.sortType === 'number') {
+        if (sortColumn.sortType === 'number') {
           return ord[orderValue] * (a[fieldValue] - b[fieldValue]);
         }
 
-        if (SortColumn.sortType === 'string') {
+        if (sortColumn.sortType === 'string') {
           return ord[orderValue] * (a[fieldValue].localeCompare(b[fieldValue], ['ru', 'en'], {caseFirst: 'upper'}));
         }
       });
     }
+
     const subElements = this.getSubElements(this.element);
     subElements.body.innerHTML = this.columns;
   }
