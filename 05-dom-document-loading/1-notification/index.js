@@ -1,6 +1,6 @@
 export default class NotificationMessage {
 
-  static prevObj = {};
+  static prevObj;
 
   constructor(mess, {
     duration = 0,
@@ -34,7 +34,7 @@ export default class NotificationMessage {
   }
 
   show(elem = document.body) {
-    if (Object.keys(NotificationMessage.prevObj).length) {
+    if (NotificationMessage.prevObj) {
       NotificationMessage.prevObj.destroy();
     }
 
@@ -43,8 +43,10 @@ export default class NotificationMessage {
     setTimeout(() => {this.destroy();}, this.duration);
   }
 
-  remove(target = document.body) {
-    this.element.remove();
+  remove() {
+    if (this.element) {
+      this.element.remove();
+    }
   }
 
   destroy() {
