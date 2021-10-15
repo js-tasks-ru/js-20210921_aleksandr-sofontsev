@@ -30,7 +30,7 @@ export default class SortableTable {
   get header() {
     return this.headerConfig.map(item => {
       return `
-        <div className = "sortable-table__cell" data-id = ${item.id} data-sortable = "${item.sortable}" data-order ="">
+        <div className="sortable-table__cell" data-id = ${item.id} data-sortable = "${item.sortable}" data-order ="">
             <span>${item.title}</span>
             ${item.sortable ? '<span data-element="arrow" class="sortable-table__sort-arrow">' +
                               '   <span class="sort-arrow"></span> ' +

@@ -51,5 +51,6 @@ export default class NotificationMessage {
 
   destroy() {
     this.remove();
+    NotificationMessage.prevObj = null;
   }
 }
