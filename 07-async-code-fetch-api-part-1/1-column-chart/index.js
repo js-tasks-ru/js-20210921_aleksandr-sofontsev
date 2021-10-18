@@ -5,6 +5,7 @@ const BACKEND_URL = 'https://course-js.javascript.ru';
 export default class ColumnChart {
 
   subElements = {};
+  chartHeight = 50;
 
   constructor({
     data = [],
@@ -19,7 +20,6 @@ export default class ColumnChart {
     this.label = label;
     this.link = link;
     this.value = value;
-    this.chartHeight = 50;
     this.formatHeading = formatHeading;
     this.url = new URL(url, BACKEND_URL);
     this.range = range;
@@ -84,15 +84,15 @@ export default class ColumnChart {
 
   async update(from, to) {
     this.element.classList.add('column-chart_loading');
-
-    this.data = Object.values(await this.load(from, to));
+    const data = await this.load(from, to);
+    this.data = Object.values(data);
     if (this.data.length) {
       this.element.classList.remove('column-chart_loading');
       this.subElements.body.innerHTML = this.getColumns();
       this.subElements.header.textContent = this.formatHeading(this.data.reduce((sum, curr) => sum + curr));
     }
 
-    return this.data;
+    return data;
   }
 
   remove() {
