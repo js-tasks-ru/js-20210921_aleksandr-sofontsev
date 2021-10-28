@@ -10,23 +10,15 @@ export default class SortableList {
     const element = event.target.closest('.sortable-list__item');
     if (element) {
       if (event.target.closest('[data-delete-handle]')) {
-        //event.target.parentElement.remove(); // работает только в текущем задании
-        element.remove(); // работает в продукт форме [почему?]
+        element.remove();
       }
 
-      // [почему?] закомментированный код работает только в текущем задании и не работает в продукт форме
-      //this.draggingElem = event.target.closest('[data-grab-handle]');
-      //if (this.draggingElem) {
-      //  this.draggingElem = this.draggingElem.parentElement;
       if (event.target.closest('[data-grab-handle]')) {
         this.draggingElem = element;
 
-        //this.draggingElem.style.height = `${this.draggingElem.offsetHeight}px`;
-        //this.draggingElem.style.width = `${this.draggingElem.parentElement.offsetWidth}px`;
         element.style.height = `${element.offsetHeight}px`;
         element.style.width = `${element.offsetWidth}px`;
 
-        //this.draggingElem.classList.add('sortable-list__item_dragging');
         element.classList.add('sortable-list__item_dragging');
 
         const rect = this.draggingElem.getBoundingClientRect();
@@ -67,8 +59,6 @@ export default class SortableList {
     this.draggingElem.style.top = `${event.clientY - this.y}px`;
     this.draggingElem.style.left = `${event.clientX - this.x}px`;
 
-    // без строчки ниже, если произошло не только нажатие мыши, но и выделение части текста,
-    // то элемент странно двигается и остаётся "в воздухе" после pointerup [почему?]
     event.preventDefault();
   };
 
